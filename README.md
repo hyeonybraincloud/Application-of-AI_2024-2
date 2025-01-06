@@ -49,8 +49,14 @@ Orig. 대비 CPU 및 GPU 사용량이 가장 많이 개선된 것은 Ghost[0]이
 ![image](https://github.com/user-attachments/assets/0669800f-6b1c-44a1-990a-5182f935d8c2)
 Orig. 대비 CPU 및 GPU 사용량이 가장 많이 개선된 것은 Ghost[0]이다. Self CPU Time Total은 66.19%, Self CUDA Time Total은 20.79% 감소 되었다.
 
-다섯 번의 실험 결과를 통해 Orig. 대비 CPU 및 GPU 사용량이 가장 많이 감소한 것은 Ghost[0]라는 것을 알 수 있다. Self CPU Time Total은 평균 67.068%, Self CUDA Time Total은 평균 22.118% 감소하였다. Ghost Convolution layer로 기존의 Convolution layer를 2개 이상 대체하는 실험도 진행했으나 유의미한 결과는 나타나지 않았다.
+다섯 번의 실험 결과를 통해 Orig. 대비 CPU 및 GPU 사용량이 가장 많이 감소한 것은 Ghost[0]라는 것을 알 수 있다. **Self CPU Time Total은 평균 67.068%**, **Self CUDA Time Total은 평균 22.118% 감소**하였다. Ghost Convolution layer로 기존의 Convolution layer를 2개 이상 대체하는 실험도 진행했으나 유의미한 결과는 나타나지 않았다.
 
 따라서 0번째 Convolution layer을 Ghost convolution 방식으로 바꾼 YOLOv8n 모델에 대해 전이학습을 시킨 후, 성능을 검사하면 다음과 같다.
 
 ![image](https://github.com/user-attachments/assets/6f88e3ad-e193-480e-8b81-ba554005f032)
+
+기존의 일부 layer가 Ghost Convolution으로 바뀌면서 Precision, Recall, mAP50, mAP50-95의 수치는 5% 이하로 감소했다. 정확도가 약간 낮아진 원인으로는 기존의 연산량을 줄임으로써 세밀한 특징이나 복잡한 환경을 탐지하기 어려웠을 가능성이 있고, Backbone의 첫 번째 Convolution layer에 적용되면서 저수준의 특징을 학습하는 과정에서 정보 손실이 발생했을 가능성이 있다. 그러나 여러 성능 지표가 5% 이하로 감소했어도 무시할만한 수치이고, 그에 대한 trade-off로 CPU 및 GPU의 사용량 감소를 얻었기 때문에 본 실험은 유의미하다.
+
+## 4. Risk-Compensation
+
+※ Transfer Learning과 Risk-Compensation은 다른 사람이 구현하였다. 본인은 Ghost Convolution 방식을 구현하였다.
